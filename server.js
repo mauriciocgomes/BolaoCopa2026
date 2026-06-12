@@ -15,6 +15,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware de idioma
+app.use((req, res, next) => {
+    const lang = req.query.lang || req.cookies?.lang || 'pt';
+    req.lang = ['pt', 'en'].includes(lang) ? lang : 'pt';
+    res.locals.lang = req.lang;
+    next();
+});
+
 // Rotas
 app.use('/', bolaoRoutes);
 

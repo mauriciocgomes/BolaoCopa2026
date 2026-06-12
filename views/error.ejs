@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="<%= typeof lang !== 'undefined' ? lang : 'pt' %>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erro - Bolão Copa 2026</title>
+    <title>Error - <%= typeof t !== 'undefined' ? t('title') : 'Bolão Copa 2026' %></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
         <div class="error-container">
             <h1>⚠️ Oops!</h1>
             <p class="error-message"><%= mensagem %></p>
-            <a href="/" class="btn-voltar">Voltar para a Página Inicial</a>
+            <a href="/?lang=<%= typeof lang !== 'undefined' ? lang : 'pt' %>" class="btn-voltar"><%= typeof t !== 'undefined' ? t('backToHome') : 'Voltar' %></a>
         </div>
     </div>
 </body>

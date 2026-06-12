@@ -35,6 +35,41 @@ header p {
     opacity: 0.9;
 }
 
+/* Seletor de idioma */
+.lang-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.lang-btn.active {
+    background: white;
+    color: #2a5298;
+    border-color: white;
+    font-weight: bold;
+}
+
 /* Alertas */
 .alert {
     padding: 12px 20px;

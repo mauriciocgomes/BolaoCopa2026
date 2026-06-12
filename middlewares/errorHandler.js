@@ -1,9 +1,15 @@
+const { getTranslation } = require('../utils/i18n');
+
 /**
  * Middleware para tratamento de erros 404
  */
 function notFoundHandler(req, res, next) {
+    const lang = req.lang || 'pt';
+    const t = (key) => getTranslation(lang, key);
     res.status(404).render('error', {
-        mensagem: 'Página não encontrada'
+        mensagem: 'Página não encontrada',
+        lang: lang,
+        t: t
     });
 }
 
@@ -12,8 +18,12 @@ function notFoundHandler(req, res, next) {
  */
 function errorHandler(err, req, res, next) {
     console.error('Erro:', err.stack);
+    const lang = req.lang || 'pt';
+    const t = (key) => getTranslation(lang, key);
     res.status(500).render('error', {
-        mensagem: 'Erro interno do servidor'
+        mensagem: t('errorLoadingGames'),
+        lang: lang,
+        t: t
     });
 }
 

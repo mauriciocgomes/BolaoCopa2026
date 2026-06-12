@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="<%= lang %>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +9,12 @@
 <body>
     <div class="container">
         <header>
+            <div class="lang-selector">
+                <a href="?lang=pt<%= error ? '&error=' + encodeURIComponent(error) : '' %><%= success ? '&success=' + encodeURIComponent(success) : '' %>" class="lang-btn <%= lang === 'pt' ? 'active' : '' %>">🇧🇷 <%= t('langPortuguese') %></a>
+                <a href="?lang=en<%= error ? '&error=' + encodeURIComponent(error) : '' %><%= success ? '&success=' + encodeURIComponent(success) : '' %>" class="lang-btn <%= lang === 'en' ? 'active' : '' %>">🇺🇸 <%= t('langEnglish') %></a>
+            </div>
             <h1>⚽ <%= titulo %></h1>
-            <p>Faça seus palpites nos jogos abaixo!</p>
+            <p><%= t('subtitle') %></p>
         </header>
 
         <% if (error) { %>
@@ -31,9 +35,9 @@
                     <div class="jogo-header">
                         <span class="jogo-data">📅 <%= jogo.dataHoraFormatada %></span>
                         <% if (!jogo.permiteApostas) { %>
-                            <span class="badge encerrado">Apostas Encerradas</span>
+                            <span class="badge encerrado"><%= t('betsClosed') %></span>
                         <% } else { %>
-                            <span class="badge aberto">Apostas Abertas</span>
+                            <span class="badge aberto"><%= t('betsOpen') %></span>
                         <% } %>
                     </div>
                     
@@ -54,12 +58,12 @@
                             <input type="hidden" name="jogo_id" value="<%= jogo.id %>">
                             
                             <div class="form-group">
-                                <label for="nome-<%= jogo.id %>">Seu Nome:</label>
+                                <label for="nome-<%= jogo.id %>"><%= t('yourName') %></label>
                                 <input type="text" 
                                        id="nome-<%= jogo.id %>" 
                                        name="nome" 
                                        required 
-                                       placeholder="Digite seu nome">
+                                       placeholder="<%= t('namePlaceholder') %>">
                             </div>
                             
                             <div class="placar-inputs">
@@ -82,14 +86,15 @@
                                 </div>
                             </div>
                             
-                            <button type="submit" class="btn-apostar">Fazer Aposta</button>
+                            <input type="hidden" name="lang" value="<%= lang %>">
+                            <button type="submit" class="btn-apostar"><%= t('placeBet') %></button>
                         </form>
                     <% } %>
 
                     <div class="apostas-section">
-                        <h4>📊 Apostas Registradas</h4>
+                        <h4>📊 <%= t('betsRegistered') %></h4>
                         <% if (jogo.apostas.length === 0) { %>
-                            <p class="sem-apostas">Nenhuma aposta registrada ainda.</p>
+                            <p class="sem-apostas"><%= t('noBets') %></p>
                         <% } else { %>
                             <ul class="lista-apostas">
                                 <% jogo.apostas.forEach(aposta => { %>
@@ -108,7 +113,7 @@
         </main>
 
         <footer>
-            <p>Bolão Copa 2026 - Desenvolvido com Node.js e Express</p>
+            <p><%= t('footer') %></p>
         </footer>
     </div>
 </body>
