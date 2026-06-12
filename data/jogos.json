@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "time1": "Brasil",
+    "time2": "Croácia",
+    "dataHora": "2026-06-15T16:00:00Z"
+  },
+  {
+    "id": 2,
+    "time1": "Argentina",
+    "time2": "México",
+    "dataHora": "2026-06-16T19:00:00Z"
+  },
+  {
+    "id": 3,
+    "time1": "França",
+    "time2": "Inglaterra",
+    "dataHora": "2026-06-17T20:00:00Z"
+  },
+  {
+    "id": 4,
+    "time1": "Alemanha",
+    "time2": "Espanha",
+    "dataHora": "2026-06-18T15:30:00Z"
+  },
+  {
+    "id": 5,
+    "time1": "Portugal",
+    "time2": "Itália",
+    "dataHora": "2026-06-19T18:00:00Z"
+  }
+]
