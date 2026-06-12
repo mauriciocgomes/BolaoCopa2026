@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
+const { getBandeira } = require('./bandeiras');
 
 const JOGOS_FILE = path.join(__dirname, '..', 'data', 'jogos.json');
 
@@ -25,14 +26,14 @@ const bandeiras = {
     'Curaçao': '🇨🇼',
     'Egito': '🇪🇬',
     'Equador': '🇪🇨',
-    'Escócia': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+    'Escócia': '�🇧',
     'Espanha': '🇪🇸',
     'Estados Unidos': '🇺🇸',
     'França': '🇫🇷',
     'Gana': '🇬🇭',
     'Haiti': '🇭🇹',
     'Holanda': '🇳🇱',
-    'Inglaterra': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+    'Inglaterra': '�🇧',
     'Irã': '🇮🇷',
     'Iraque': '🇮🇶',
     'Japão': '🇯🇵',
@@ -54,15 +55,6 @@ const bandeiras = {
     'Uzbequistão': '🇺🇿',
     'Uruguai': '🇺🇾'
 };
-
-/**
- * Retorna o emoji da bandeira do país
- * @param {string} pais - Nome do país
- * @returns {string} - Emoji da bandeira ou 🏳️ se não encontrado
- */
-function getBandeira(pais) {
-    return bandeiras[pais] || '🏳️';
-}
 
 /**
  * Lê os jogos do arquivo JSON

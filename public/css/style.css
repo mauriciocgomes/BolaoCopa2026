@@ -233,17 +233,23 @@ header p {
 .bandeira {
     font-size: 2.2rem;
     line-height: 1;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    display: inline-block;
+    min-width: 1.2em;
+    text-align: center;
 }
 
 @media (min-width: 480px) {
     .bandeira {
         font-size: 2.6rem;
+        font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
     }
 }
 
 @media (min-width: 768px) {
     .bandeira {
         font-size: 3rem;
+        font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
     }
 }
 
@@ -525,6 +531,8 @@ footer {
     
     .bandeira {
         font-size: 1.8rem;
+        font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+        min-width: 1.2em;
     }
     
     .nome {
