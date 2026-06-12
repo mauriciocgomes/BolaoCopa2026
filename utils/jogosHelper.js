@@ -3,6 +3,67 @@ const path = require('path');
 
 const JOGOS_FILE = path.join(__dirname, '..', 'data', 'jogos.json');
 
+// Mapeamento de países para emojis de bandeira
+const bandeiras = {
+    'Alemanha': '🇩🇪',
+    'Arábia Saudita': '🇸🇦',
+    'Argentina': '🇦🇷',
+    'Argélia': '🇩🇿',
+    'Áustria': '🇦🇹',
+    'Austrália': '🇦🇺',
+    'África do Sul': '🇿🇦',
+    'Bélgica': '🇧🇪',
+    'Bósnia e Herzegovina': '🇧🇦',
+    'Brasil': '🇧🇷',
+    'Cabo Verde': '🇨🇻',
+    'Canadá': '🇨🇦',
+    'Catar': '🇶🇦',
+    'Colômbia': '🇨🇴',
+    'Coreia do Sul': '🇰🇷',
+    'Costa do Marfim': '🇨🇮',
+    'Croácia': '🇭🇷',
+    'Curaçao': '🇨🇼',
+    'Egito': '🇪🇬',
+    'Equador': '🇪🇨',
+    'Escócia': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+    'Espanha': '🇪🇸',
+    'Estados Unidos': '🇺🇸',
+    'França': '🇫🇷',
+    'Gana': '🇬🇭',
+    'Haiti': '🇭🇹',
+    'Holanda': '🇳🇱',
+    'Inglaterra': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+    'Irã': '🇮🇷',
+    'Iraque': '🇮🇶',
+    'Japão': '🇯🇵',
+    'Jordânia': '🇯🇴',
+    'Marrocos': '🇲🇦',
+    'México': '🇲🇽',
+    'Nova Zelândia': '🇳🇿',
+    'Noruega': '🇳🇴',
+    'Panamá': '🇵🇦',
+    'Paraguai': '🇵🇾',
+    'Portugal': '🇵🇹',
+    'República Democrática do Congo': '🇨🇩',
+    'República Tcheca': '🇨🇿',
+    'Senegal': '🇸🇳',
+    'Suécia': '🇸🇪',
+    'Suíça': '🇨🇭',
+    'Tunísia': '🇹🇳',
+    'Turquia': '🇹🇷',
+    'Uzbequistão': '🇺🇿',
+    'Uruguai': '🇺🇾'
+};
+
+/**
+ * Retorna o emoji da bandeira do país
+ * @param {string} pais - Nome do país
+ * @returns {string} - Emoji da bandeira ou 🏳️ se não encontrado
+ */
+function getBandeira(pais) {
+    return bandeiras[pais] || '🏳️';
+}
+
 /**
  * Lê os jogos do arquivo JSON
  * @returns {Promise<Array>} - Array de jogos
@@ -57,5 +118,6 @@ module.exports = {
     lerJogos,
     buscarJogoPorId,
     permiteApostas,
-    formatarDataJogo
+    formatarDataJogo,
+    getBandeira
 };

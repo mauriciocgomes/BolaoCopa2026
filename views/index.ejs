@@ -2,9 +2,12 @@
 <html lang="<%= lang %>">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title><%= titulo %></title>
     <link rel="stylesheet" href="/css/style.css">
+    <meta name="theme-color" content="#1e3c72">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <div class="container">
@@ -43,12 +46,12 @@
                     
                     <div class="jogo-times">
                         <div class="time">
-                            <span class="bandeira">🏳️</span>
+                            <span class="bandeira"><%= jogo.bandeira1 %></span>
                             <span class="nome"><%= jogo.time1 %></span>
                         </div>
                         <span class="vs">VS</span>
                         <div class="time">
-                            <span class="bandeira">🏳️</span>
+                            <span class="bandeira"><%= jogo.bandeira2 %></span>
                             <span class="nome"><%= jogo.time2 %></span>
                         </div>
                     </div>

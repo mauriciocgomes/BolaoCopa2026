@@ -1,4 +1,4 @@
-const { lerJogos, permiteApostas, formatarDataJogo } = require('../utils/jogosHelper');
+const { lerJogos, permiteApostas, formatarDataJogo, getBandeira } = require('../utils/jogosHelper');
 const { lerApostasPorJogo, adicionarAposta } = require('../utils/csvHelper');
 const { getTranslation } = require('../utils/i18n');
 
@@ -17,7 +17,9 @@ async function index(req, res) {
                     ...jogo,
                     dataHoraFormatada: formatarDataJogo(jogo.dataHora),
                     permiteApostas: permiteApostas(jogo.dataHora),
-                    apostas: apostas
+                    apostas: apostas,
+                    bandeira1: getBandeira(jogo.time1),
+                    bandeira2: getBandeira(jogo.time2)
                 };
             })
         );
