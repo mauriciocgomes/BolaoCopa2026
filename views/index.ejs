@@ -57,7 +57,7 @@
             <%# JOGOS DE HOJE %>
             <% if (jogosDeHoje && jogosDeHoje.length > 0) { %>
                 <div class="secao-jogos-hoje">
-                    <h2 class="titulo-secao">⚽ Jogos de Hoje</h2>
+                    <h2 class="titulo-secao">⚽ <%= t('todayGames') %></h2>
                     <% jogosDeHoje.forEach(jogo => { %>
                         <%- include('partials/jogo-card', {jogo: jogo, participantes: participantes, t: t, lang: lang}) %>
                     <% }) %>
@@ -67,7 +67,7 @@
             <%# OUTROS JOGOS %>
             <% if (outrosJogos && outrosJogos.length > 0) { %>
                 <div class="secao-outros-jogos">
-                    <h2 class="titulo-secao">📅 Próximos Jogos</h2>
+                    <h2 class="titulo-secao">📅 <%= t('upcomingGames') %></h2>
                     <% outrosJogos.forEach(jogo => { %>
                         <%- include('partials/jogo-card', {jogo: jogo, participantes: participantes, t: t, lang: lang}) %>
                     <% }) %>

@@ -24,7 +24,9 @@ const translations = {
         officialResult: 'Resultado Oficial',
         points: 'pts',
         pointsExact: 'Placar exato = 3 pts',
-        pointsResult: 'Acertar resultado = 1 pt'
+        pointsResult: 'Acertar resultado = 1 pt',
+        todayGames: 'Jogos de Hoje',
+        upcomingGames: 'Próximos Jogos'
     },
     en: {
         title: 'World Cup 2026 Betting Pool',
@@ -51,7 +53,9 @@ const translations = {
         officialResult: 'Official Result',
         points: 'pts',
         pointsExact: 'Exact score = 3 pts',
-        pointsResult: 'Correct result = 1 pt'
+        pointsResult: 'Correct result = 1 pt',
+        todayGames: "Today's Games",
+        upcomingGames: 'Upcoming Games'
     }
 };
 

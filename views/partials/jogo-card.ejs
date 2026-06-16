@@ -1,0 +1,91 @@
+<div class="jogo-card <%= jogo.ehJogoDeHoje ? 'jogo-hoje' : '' %>">
+    <div class="jogo-header">
+        <span class="jogo-data">📅 <%= jogo.dataHoraFormatada %></span>
+        <span class="badge aberto"><%= t('betsOpen') %></span>
+    </div>
+    
+    <div class="jogo-times">
+        <div class="time">
+            <span class="bandeira"><%= jogo.bandeira1 %></span>
+            <span class="nome"><%= jogo.time1 %></span>
+        </div>
+        <span class="vs">VS</span>
+        <div class="time">
+            <span class="bandeira"><%= jogo.bandeira2 %></span>
+            <span class="nome"><%= jogo.time2 %></span>
+        </div>
+    </div>
+
+    <% if (jogo.resultado) { %>
+        <div class="resultado-oficial">
+            <span class="resultado-label">🏆 <%= t('officialResult') %>:</span>
+            <span class="resultado-placar"><%= jogo.resultado.placar_time1 %> x <%= jogo.resultado.placar_time2 %></span>
+        </div>
+    <% } %>
+
+    <form action="/apostar" method="POST" class="aposta-form">
+        <input type="hidden" name="jogo_id" value="<%= jogo.id %>">
+        
+        <div class="form-group">
+            <label for="nome-<%= jogo.id %>"><%= t('yourName') %></label>
+            <select id="nome-<%= jogo.id %>" name="nome" required class="select-participante">
+                <option value="">Selecione...</option>
+                <% participantes.forEach(participante => { %>
+                    <option value="<%= participante %>"><%= participante %></option>
+                <% }) %>
+            </select>
+        </div>
+        
+        <div class="placar-inputs">
+            <div class="placar-time">
+                <label><%= jogo.time1 %></label>
+                <input type="number" 
+                       name="palpite_time1" 
+                       min="0" 
+                       required 
+                       placeholder="0">
+            </div>
+            <span class="vs-small">X</span>
+            <div class="placar-time">
+                <label><%= jogo.time2 %></label>
+                <input type="number" 
+                       name="palpite_time2" 
+                       min="0" 
+                       required 
+                       placeholder="0">
+            </div>
+        </div>
+        
+        <input type="hidden" name="lang" value="<%= lang %>">
+        <button type="submit" class="btn-apostar"><%= t('placeBet') %></button>
+    </form>
+
+    <div class="apostas-section">
+        <h4>📊 <%= t('betsRegistered') %></h4>
+        <% if (jogo.resultado) { %>
+            <div class="pontos-legenda">
+                <span class="legenda-item legenda-exato">🥇 <%= t('pointsExact') %></span>
+                <span class="legenda-item legenda-resultado">✅ <%= t('pointsResult') %></span>
+            </div>
+        <% } %>
+        <% if (jogo.apostas.length === 0) { %>
+            <p class="sem-apostas"><%= t('noBets') %></p>
+        <% } else { %>
+            <ul class="lista-apostas">
+                <% jogo.apostas.forEach(aposta => { %>
+                    <li>
+                        <span class="apostador"><%= aposta.nome %></span>
+                        <span class="palpite">
+                            <%= aposta.palpite_time1 %> x <%= aposta.palpite_time2 %>
+                        </span>
+                        <% if (aposta.pontos > 0) { %>
+                            <span class="pontos-badge <%= aposta.pontos === 3 ? 'pontos-exato' : 'pontos-resultado' %>">
+                                +<%= aposta.pontos %> <%= t('points') %>
+                            </span>
+                        <% } %>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </div>
+</div>

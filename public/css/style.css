@@ -218,6 +218,37 @@ header p {
     }
 }
 
+/* Seções de jogos */
+.secao-jogos-hoje {
+    margin-bottom: 30px;
+}
+
+.secao-outros-jogos {
+    margin-bottom: 30px;
+}
+
+.titulo-secao {
+    text-align: center;
+    color: #2a5298;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.secao-jogos-hoje .titulo-secao {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #333;
+    font-weight: bold;
+}
+
+.jogo-card.jogo-hoje {
+    border: 3px solid #ffd700;
+    box-shadow: 0 6px 12px rgba(255, 215, 0, 0.3);
+}
+
 /* Cards de jogos */
 .jogo-card {
     background: white;
