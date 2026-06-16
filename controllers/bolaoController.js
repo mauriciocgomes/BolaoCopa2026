@@ -11,25 +11,32 @@ const { lerResultados, salvarResultado } = require('../utils/resultadosHelper');
  */
 function calcularPontos(aposta, resultado) {
     if (!resultado) return 0;
-    
+
     const palpite1 = parseInt(aposta.palpite_time1);
     const palpite2 = parseInt(aposta.palpite_time2);
     const real1 = parseInt(resultado.placar_time1);
     const real2 = parseInt(resultado.placar_time2);
-    
+
     // Placar exato = 3 pontos
     if (palpite1 === real1 && palpite2 === real2) {
         return 3;
     }
-    
-    // Acertar resultado (vencedor ou empate) = 1 ponto
-    const palpiteResultado = palpite1 > palpite2 ? 1 : palpite1 < palpite2 ? 2 : 0; // 1=time1, 2=time2, 0=empate
-    const realResultado = real1 > real2 ? 1 : real1 < real2 ? 2 : 0;
-    
-    if (palpiteResultado === realResultado) {
+
+    // Empate: se acertou que foi empate, ganha 3 pontos (mesmo sem placar exato)
+    const foiEmpateReal = real1 === real2;
+    const foiEmpatePalpite = palpite1 === palpite2;
+    if (foiEmpateReal && foiEmpatePalpite) {
+        return 3;
+    }
+
+    // Acertar vencedor (sem placar exato) = 1 ponto
+    const vencedorReal = real1 > real2 ? 1 : real1 < real2 ? 2 : 0; // 1=time1, 2=time2, 0=empate
+    const vencedorPalpite = palpite1 > palpite2 ? 1 : palpite1 < palpite2 ? 2 : 0;
+
+    if (vencedorReal === vencedorPalpite) {
         return 1;
     }
-    
+
     return 0;
 }
 
