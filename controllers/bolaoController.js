@@ -189,8 +189,21 @@ async function fazerAposta(req, res) {
             return res.redirect(`/?error=${encodeURIComponent(t('errorGameNotFound'))}&lang=${lang}`);
         }
         
+        // Carrega resultados para verificar se apostas estão encerradas
+        const resultados = await lerResultados();
+        const resultadosMap = {};
+        resultados.forEach(r => {
+            resultadosMap[r.jogo_id] = r;
+        });
+        
         if (!permiteApostas(jogo.dataHora)) {
             return res.redirect(`/?error=${encodeURIComponent(t('errorBetsClosed'))}&lang=${lang}`);
+        }
+        
+        // Verifica se o jogo já tem resultado (encerra apostas)
+        const resultadoExistente = resultadosMap[numJogoId];
+        if (resultadoExistente) {
+            return res.redirect(`/?error=${encodeURIComponent('Apostas encerradas para este jogo (resultado já definido)')}&lang=${lang}`);
         }
         
         // Verifica se o participante já apostou neste jogo
