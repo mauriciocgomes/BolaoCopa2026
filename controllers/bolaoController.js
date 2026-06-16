@@ -125,6 +125,7 @@ async function index(req, res) {
             'Clau',
             'Duda',
             'Jared',
+            'Kin',
             'Marcelo',
             'Matias',
             'Mauricio',
