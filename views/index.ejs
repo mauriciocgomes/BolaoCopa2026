@@ -15,6 +15,7 @@
             <div class="lang-selector">
                 <a href="?lang=pt<%= error ? '&error=' + encodeURIComponent(error) : '' %><%= success ? '&success=' + encodeURIComponent(success) : '' %>" class="lang-btn <%= lang === 'pt' ? 'active' : '' %>">🇧🇷 <%= t('langPortuguese') %></a>
                 <a href="?lang=en<%= error ? '&error=' + encodeURIComponent(error) : '' %><%= success ? '&success=' + encodeURIComponent(success) : '' %>" class="lang-btn <%= lang === 'en' ? 'active' : '' %>">🇺🇸 <%= t('langEnglish') %></a>
+                <a href="/admin/resultados?lang=<%= lang %>" class="lang-btn" style="background: #dc3545; margin-left: 10px;">⚙️ Admin</a>
             </div>
             <h1>⚽ <%= titulo %></h1>
             <p><%= t('subtitle') %></p>
@@ -32,87 +33,46 @@
             </div>
         <% } %>
 
-        <main>
-            <% jogos.forEach(jogo => { %>
-                <div class="jogo-card">
-                    <div class="jogo-header">
-                        <span class="jogo-data">📅 <%= jogo.dataHoraFormatada %></span>
-                        <% if (!jogo.permiteApostas) { %>
-                            <span class="badge encerrado"><%= t('betsClosed') %></span>
-                        <% } else { %>
-                            <span class="badge aberto"><%= t('betsOpen') %></span>
-                        <% } %>
-                    </div>
-                    
-                    <div class="jogo-times">
-                        <div class="time">
-                            <span class="bandeira"><%= jogo.bandeira1 %></span>
-                            <span class="nome"><%= jogo.time1 %></span>
+        <% if (ranking && ranking.length > 0) { %>
+            <div class="ranking-section">
+                <h3>🏆 Ranking de Pontos</h3>
+                <div class="ranking-list">
+                    <% ranking.forEach((participante, index) => { %>
+                        <div class="ranking-item <%= index === 0 ? 'primeiro' : index === 1 ? 'segundo' : index === 2 ? 'terceiro' : '' %>">
+                            <span class="ranking-posicao"><%= index + 1 %>º</span>
+                            <span class="ranking-nome"><%= participante.nome %></span>
+                            <span class="ranking-pontos"><%= participante.totalPontos %> pts</span>
+                            <% if (participante.placaresExatos > 0 || participante.resultadosCorretos > 0) { %>
+                                <span class="ranking-detalhes">
+                                    <%= participante.placaresExatos %>🥇 <%= participante.resultadosCorretos %>✅
+                                </span>
+                            <% } %>
                         </div>
-                        <span class="vs">VS</span>
-                        <div class="time">
-                            <span class="bandeira"><%= jogo.bandeira2 %></span>
-                            <span class="nome"><%= jogo.time2 %></span>
-                        </div>
-                    </div>
-
-                    <% if (jogo.permiteApostas) { %>
-                        <form action="/apostar" method="POST" class="aposta-form">
-                            <input type="hidden" name="jogo_id" value="<%= jogo.id %>">
-                            
-                            <div class="form-group">
-                                <label for="nome-<%= jogo.id %>"><%= t('yourName') %></label>
-                                <input type="text" 
-                                       id="nome-<%= jogo.id %>" 
-                                       name="nome" 
-                                       required 
-                                       placeholder="<%= t('namePlaceholder') %>">
-                            </div>
-                            
-                            <div class="placar-inputs">
-                                <div class="placar-time">
-                                    <label><%= jogo.time1 %></label>
-                                    <input type="number" 
-                                           name="palpite_time1" 
-                                           min="0" 
-                                           required 
-                                           placeholder="0">
-                                </div>
-                                <span class="vs-small">X</span>
-                                <div class="placar-time">
-                                    <label><%= jogo.time2 %></label>
-                                    <input type="number" 
-                                           name="palpite_time2" 
-                                           min="0" 
-                                           required 
-                                           placeholder="0">
-                                </div>
-                            </div>
-                            
-                            <input type="hidden" name="lang" value="<%= lang %>">
-                            <button type="submit" class="btn-apostar"><%= t('placeBet') %></button>
-                        </form>
-                    <% } %>
-
-                    <div class="apostas-section">
-                        <h4>📊 <%= t('betsRegistered') %></h4>
-                        <% if (jogo.apostas.length === 0) { %>
-                            <p class="sem-apostas"><%= t('noBets') %></p>
-                        <% } else { %>
-                            <ul class="lista-apostas">
-                                <% jogo.apostas.forEach(aposta => { %>
-                                    <li>
-                                        <span class="apostador"><%= aposta.nome %></span>
-                                        <span class="palpite">
-                                            <%= aposta.palpite_time1 %> x <%= aposta.palpite_time2 %>
-                                        </span>
-                                    </li>
-                                <% }) %>
-                            </ul>
-                        <% } %>
-                    </div>
+                    <% }) %>
                 </div>
-            <% }) %>
+            </div>
+        <% } %>
+
+        <main>
+            <%# JOGOS DE HOJE %>
+            <% if (jogosDeHoje && jogosDeHoje.length > 0) { %>
+                <div class="secao-jogos-hoje">
+                    <h2 class="titulo-secao">⚽ Jogos de Hoje</h2>
+                    <% jogosDeHoje.forEach(jogo => { %>
+                        <%- include('partials/jogo-card', {jogo: jogo, participantes: participantes, t: t, lang: lang}) %>
+                    <% }) %>
+                </div>
+            <% } %>
+            
+            <%# OUTROS JOGOS %>
+            <% if (outrosJogos && outrosJogos.length > 0) { %>
+                <div class="secao-outros-jogos">
+                    <h2 class="titulo-secao">📅 Próximos Jogos</h2>
+                    <% outrosJogos.forEach(jogo => { %>
+                        <%- include('partials/jogo-card', {jogo: jogo, participantes: participantes, t: t, lang: lang}) %>
+                    <% }) %>
+                </div>
+            <% } %>
         </main>
 
         <footer>

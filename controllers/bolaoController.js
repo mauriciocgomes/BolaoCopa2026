@@ -1,6 +1,37 @@
 const { lerJogos, permiteApostas, formatarDataJogo, getBandeira } = require('../utils/jogosHelper');
 const { lerApostasPorJogo, adicionarAposta } = require('../utils/csvHelper');
 const { getTranslation } = require('../utils/i18n');
+const { lerResultados, salvarResultado } = require('../utils/resultadosHelper');
+
+/**
+ * Calcula pontos de uma aposta baseado no resultado oficial
+ * @param {Object} aposta - Objeto com palpite_time1 e palpite_time2
+ * @param {Object} resultado - Objeto com placar_time1 e placar_time2
+ * @returns {number} - Pontos ganhos (0, 1 ou 3)
+ */
+function calcularPontos(aposta, resultado) {
+    if (!resultado) return 0;
+    
+    const palpite1 = parseInt(aposta.palpite_time1);
+    const palpite2 = parseInt(aposta.palpite_time2);
+    const real1 = parseInt(resultado.placar_time1);
+    const real2 = parseInt(resultado.placar_time2);
+    
+    // Placar exato = 3 pontos
+    if (palpite1 === real1 && palpite2 === real2) {
+        return 3;
+    }
+    
+    // Acertar resultado (vencedor ou empate) = 1 ponto
+    const palpiteResultado = palpite1 > palpite2 ? 1 : palpite1 < palpite2 ? 2 : 0; // 1=time1, 2=time2, 0=empate
+    const realResultado = real1 > real2 ? 1 : real1 < real2 ? 2 : 0;
+    
+    if (palpiteResultado === realResultado) {
+        return 1;
+    }
+    
+    return 0;
+}
 
 /**
  * Renderiza a página inicial com todos os jogos e suas apostas
@@ -8,30 +39,109 @@ const { getTranslation } = require('../utils/i18n');
 async function index(req, res) {
     try {
         const jogos = await lerJogos();
+        const resultados = await lerResultados();
+        
+        // Cria mapa de resultados por jogo
+        const resultadosMap = {};
+        resultados.forEach(r => {
+            resultadosMap[r.jogo_id] = r;
+        });
+        
+        // Data atual para filtrar jogos do dia
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const amanha = new Date(hoje);
+        amanha.setDate(amanha.getDate() + 1);
         
         // Para cada jogo, busca as apostas e verifica se ainda permite apostas
         const jogosCompletos = await Promise.all(
             jogos.map(async (jogo) => {
                 const apostas = await lerApostasPorJogo(jogo.id);
+                const resultado = resultadosMap[jogo.id] || null;
+                
+                // Calcula pontos para cada aposta
+                const apostasComPontos = apostas.map(aposta => ({
+                    ...aposta,
+                    pontos: calcularPontos(aposta, resultado)
+                }));
+                
+                // Verifica se o jogo é hoje
+                const dataJogo = new Date(jogo.dataHora);
+                const ehJogoDeHoje = dataJogo >= hoje && dataJogo < amanha;
+                
                 return {
                     ...jogo,
                     dataHoraFormatada: formatarDataJogo(jogo.dataHora),
                     permiteApostas: permiteApostas(jogo.dataHora),
-                    apostas: apostas,
+                    apostas: apostasComPontos,
                     bandeira1: getBandeira(jogo.time1),
-                    bandeira2: getBandeira(jogo.time2)
+                    bandeira2: getBandeira(jogo.time2),
+                    resultado: resultado,
+                    ehJogoDeHoje: ehJogoDeHoje
                 };
             })
         );
         
+        // Separa jogos de hoje dos demais
+        const jogosDeHoje = jogosCompletos.filter(j => j.ehJogoDeHoje);
+        const outrosJogos = jogosCompletos.filter(j => !j.ehJogoDeHoje);
+        
         const lang = req.lang || 'pt';
         const t = (key) => getTranslation(lang, key);
         
+        // Calcula pontuação total por participante
+        const pontuacaoParticipantes = {};
+        
+        jogosCompletos.forEach(jogo => {
+            jogo.apostas.forEach(aposta => {
+                if (!pontuacaoParticipantes[aposta.nome]) {
+                    pontuacaoParticipantes[aposta.nome] = {
+                        nome: aposta.nome,
+                        totalPontos: 0,
+                        placaresExatos: 0,
+                        resultadosCorretos: 0
+                    };
+                }
+                
+                if (aposta.pontos > 0) {
+                    pontuacaoParticipantes[aposta.nome].totalPontos += aposta.pontos;
+                    if (aposta.pontos === 3) {
+                        pontuacaoParticipantes[aposta.nome].placaresExatos++;
+                    } else if (aposta.pontos === 1) {
+                        pontuacaoParticipantes[aposta.nome].resultadosCorretos++;
+                    }
+                }
+            });
+        });
+        
+        // Converte para array e ordena por pontuação (maior primeiro)
+        const rankingParticipantes = Object.values(pontuacaoParticipantes)
+            .sort((a, b) => b.totalPontos - a.totalPontos);
+        
+        // Lista de participantes em ordem alfabética
+        const participantes = [
+            'Cata',
+            'Clara',
+            'Clau',
+            'Duda',
+            'Jared',
+            'Marcelo',
+            'Matias',
+            'Mauricio',
+            'Nei',
+            'Raquel',
+            'Vanessa'
+        ];
+        
         res.render('index', { 
             jogos: jogosCompletos,
+            jogosDeHoje: jogosDeHoje,
+            outrosJogos: outrosJogos,
             titulo: t('title'),
             lang: lang,
             t: t,
+            participantes: participantes,
+            ranking: rankingParticipantes,
             error: req.query.error || null,
             success: req.query.success || null
         });
@@ -98,7 +208,81 @@ async function fazerAposta(req, res) {
     }
 }
 
+/**
+ * Renderiza página de administração de resultados
+ */
+async function adminResultados(req, res) {
+    try {
+        const jogos = await lerJogos();
+        const resultados = await lerResultados();
+        
+        // Cria mapa de resultados por jogo
+        const resultadosMap = {};
+        resultados.forEach(r => {
+            resultadosMap[r.jogo_id] = r;
+        });
+        
+        const jogosComResultados = jogos.map(jogo => ({
+            ...jogo,
+            dataHoraFormatada: formatarDataJogo(jogo.dataHora),
+            resultado: resultadosMap[jogo.id] || null
+        }));
+        
+        const lang = req.lang || 'pt';
+        const t = (key) => getTranslation(lang, key);
+        
+        res.render('admin-resultados', {
+            jogos: jogosComResultados,
+            lang: lang,
+            t: t,
+            error: req.query.error || null,
+            success: req.query.success || null
+        });
+    } catch (error) {
+        console.error('Erro ao carregar admin de resultados:', error);
+        const lang = req.lang || 'pt';
+        const t = (key) => getTranslation(lang, key);
+        res.status(500).render('error', {
+            mensagem: t('errorLoadingGames'),
+            lang: lang,
+            t: t
+        });
+    }
+}
+
+/**
+ * Processa POST para salvar resultado de um jogo
+ */
+async function salvarResultadoJogo(req, res) {
+    try {
+        const { jogo_id, placar_time1, placar_time2, lang } = req.body;
+        
+        // Validação
+        if (!jogo_id || placar_time1 === '' || placar_time2 === '') {
+            return res.redirect('/admin/resultados?error=' + encodeURIComponent('Todos os campos são obrigatórios'));
+        }
+        
+        const numJogoId = parseInt(jogo_id);
+        const numPlacar1 = parseInt(placar_time1);
+        const numPlacar2 = parseInt(placar_time2);
+        
+        if (isNaN(numJogoId) || isNaN(numPlacar1) || isNaN(numPlacar2)) {
+            return res.redirect('/admin/resultados?error=' + encodeURIComponent('Valores inválidos'));
+        }
+        
+        // Salva o resultado
+        await salvarResultado(numJogoId, numPlacar1, numPlacar2);
+        
+        res.redirect('/admin/resultados?success=' + encodeURIComponent('Resultado salvo com sucesso!'));
+    } catch (error) {
+        console.error('Erro ao salvar resultado:', error);
+        res.redirect('/admin/resultados?error=' + encodeURIComponent('Erro ao salvar resultado'));
+    }
+}
+
 module.exports = {
     index,
-    fazerAposta
+    fazerAposta,
+    adminResultados,
+    salvarResultadoJogo
 };

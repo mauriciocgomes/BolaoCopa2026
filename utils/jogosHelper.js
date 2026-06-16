@@ -80,14 +80,13 @@ async function buscarJogoPorId(id) {
 }
 
 /**
- * Verifica se o jogo ainda permite apostas (data atual < data do jogo)
+ * Verifica se o jogo ainda permite apostas
  * @param {string} dataHoraJogo - Data/hora do jogo em formato ISO 8601
- * @returns {boolean} - true se ainda permite apostas
+ * @returns {boolean} - true se ainda permite apostas (sempre true - apostas desabilitadas)
  */
 function permiteApostas(dataHoraJogo) {
-    const agora = new Date();
-    const dataJogo = new Date(dataHoraJogo);
-    return agora < dataJogo;
+    // DESABILITADO: Apostas sempre abertas
+    return true;
 }
 
 /**

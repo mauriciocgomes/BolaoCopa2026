@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Admin - Resultados - <%= t('title') %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta name="theme-color" content="#1e3c72">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .admin-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .resultado-form {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .resultado-atual {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .placar-admin {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .placar-admin input {
+            width: 70px;
+            padding: 12px;
+            font-size: 1.3rem;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .placar-admin input:focus {
+            outline: none;
+            border-color: #dc3545;
+        }
+        
+        .btn-salvar {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-salvar:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-voltar {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+        }
+        
+        .sem-resultado {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/?lang=<%= lang %>" class="btn-voltar">← Voltar para o Bolão</a>
+        
+        <div class="admin-header">
+            <h2>⚽ Administração de Resultados</h2>
+            <p>Informe o placar oficial dos jogos</p>
+        </div>
+        
+        <% if (error) { %>
+            <div class="alert alert-error">
+                <%= error %>
+            </div>
+        <% } %>
+        
+        <% if (success) { %>
+            <div class="alert alert-success">
+                <%= success %>
+            </div>
+        <% } %>
+        
+        <main>
+            <% jogos.forEach(jogo => { %>
+                <div class="jogo-card">
+                    <div class="jogo-header">
+                        <span class="jogo-data">📅 <%= jogo.dataHoraFormatada %></span>
+                        <span class="badge <%= jogo.resultado ? 'encerrado' : 'aberto' %>">
+                            <%= jogo.resultado ? 'Resultado Cadastrado' : 'Aguardando Resultado' %>
+                        </span>
+                    </div>
+                    
+                    <div class="jogo-times">
+                        <div class="time">
+                            <span class="bandeira"><%= jogo.bandeira1 || '🏳️' %></span>
+                            <span class="nome"><%= jogo.time1 %></span>
+                        </div>
+                        <span class="vs">VS</span>
+                        <div class="time">
+                            <span class="bandeira"><%= jogo.bandeira2 || '🏳️' %></span>
+                            <span class="nome"><%= jogo.time2 %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resultado-form">
+                        <% if (jogo.resultado) { %>
+                            <div class="resultado-atual">
+                                Resultado Atual: <%= jogo.resultado.placar_time1 %> x <%= jogo.resultado.placar_time2 %>
+                            </div>
+                        <% } else { %>
+                            <p class="sem-resultado">Nenhum resultado cadastrado</p>
+                        <% } %>
+                        
+                        <form action="/admin/resultados" method="POST">
+                            <input type="hidden" name="jogo_id" value="<%= jogo.id %>">
+                            <input type="hidden" name="lang" value="<%= lang %>">
+                            
+                            <div class="placar-admin">
+                                <div>
+                                    <label><%= jogo.time1 %></label>
+                                    <input type="number" name="placar_time1" min="0" required 
+                                           value="<%= jogo.resultado ? jogo.resultado.placar_time1 : '' %>">
+                                </div>
+                                <span class="vs">x</span>
+                                <div>
+                                    <label><%= jogo.time2 %></label>
+                                    <input type="number" name="placar_time2" min="0" required
+                                           value="<%= jogo.resultado ? jogo.resultado.placar_time2 : '' %>">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-salvar">
+                                <%= jogo.resultado ? 'Atualizar Resultado' : 'Salvar Resultado' %>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        </main>
+        
+        <footer>
+            <p><%= t('footer') %></p>
+        </footer>
+    </div>
+</body>
+</html>

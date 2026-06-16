@@ -126,6 +126,98 @@ header p {
     border: 1px solid #c3e6cb;
 }
 
+/* Ranking de Pontos */
+.ranking-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.ranking-section h3 {
+    text-align: center;
+    color: #2a5298;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.ranking-item:hover {
+    transform: translateX(5px);
+}
+
+.ranking-item.primeiro {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    font-weight: bold;
+}
+
+.ranking-item.segundo {
+    background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+    font-weight: bold;
+}
+
+.ranking-item.terceiro {
+    background: linear-gradient(135deg, #cd7f32 0%, #daa520 100%);
+    color: white;
+    font-weight: bold;
+}
+
+.ranking-posicao {
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 35px;
+    text-align: center;
+}
+
+.ranking-nome {
+    flex: 1;
+    font-weight: 500;
+}
+
+.ranking-pontos {
+    background: #2a5298;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.ranking-detalhes {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+    .ranking-section {
+        padding: 25px;
+    }
+    
+    .ranking-section h3 {
+        font-size: 1.5rem;
+    }
+    
+    .ranking-item {
+        padding: 15px 20px;
+    }
+}
+
 /* Cards de jogos */
 .jogo-card {
     background: white;
@@ -195,6 +287,40 @@ header p {
 .badge.encerrado {
     background-color: #dc3545;
     color: white;
+}
+
+/* Resultado Oficial */
+.resultado-oficial {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #333;
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.resultado-label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    opacity: 0.8;
+}
+
+.resultado-placar {
+    font-size: 1.3rem;
+    color: #000;
+}
+
+@media (min-width: 768px) {
+    .resultado-oficial {
+        padding: 15px 20px;
+    }
+    
+    .resultado-placar {
+        font-size: 1.5rem;
+    }
 }
 
 /* Times */
@@ -328,6 +454,31 @@ header p {
 .form-group input[type="text"]:focus {
     outline: none;
     border-color: #2a5298;
+}
+
+.select-participante {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+}
+
+.select-participante:focus {
+    outline: none;
+    border-color: #2a5298;
+}
+
+.select-participante option {
+    padding: 8px;
 }
 
 .placar-inputs {
@@ -465,6 +616,57 @@ header p {
     .palpite {
         padding: 4px 10px;
         font-size: 0.9rem;
+    }
+}
+
+/* Pontos legenda */
+.pontos-legenda {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.legenda-item {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.legenda-exato {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.legenda-resultado {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Pontos badges */
+.pontos-badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.pontos-exato {
+    background: #ffd700;
+    color: #333;
+}
+
+.pontos-resultado {
+    background: #28a745;
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .pontos-badge {
+        padding: 3px 8px;
+        font-size: 0.8rem;
     }
 }
 

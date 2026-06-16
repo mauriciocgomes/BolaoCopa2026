@@ -2,7 +2,7 @@ const translations = {
     pt: {
         title: 'Bolão Copa 2026',
         subtitle: 'Faça seus palpites nos jogos abaixo!',
-        yourName: 'Seu Nome:',
+        yourName: 'Selecione seu nome:',
         namePlaceholder: 'Digite seu nome',
         placeBet: 'Fazer Aposta',
         betsRegistered: 'Apostas Registradas',
@@ -20,12 +20,16 @@ const translations = {
         backToHome: 'Voltar para a Página Inicial',
         footer: 'Bolão Copa 2026 - Desenvolvido com Node.js e Express',
         langPortuguese: 'Português',
-        langEnglish: 'Inglês'
+        langEnglish: 'Inglês',
+        officialResult: 'Resultado Oficial',
+        points: 'pts',
+        pointsExact: 'Placar exato = 3 pts',
+        pointsResult: 'Acertar resultado = 1 pt'
     },
     en: {
         title: 'World Cup 2026 Betting Pool',
         subtitle: 'Place your bets on the matches below!',
-        yourName: 'Your Name:',
+        yourName: 'Select your name:',
         namePlaceholder: 'Enter your name',
         placeBet: 'Place Bet',
         betsRegistered: 'Registered Bets',
@@ -43,7 +47,11 @@ const translations = {
         backToHome: 'Back to Home Page',
         footer: 'World Cup 2026 Betting Pool - Developed with Node.js and Express',
         langPortuguese: 'Portuguese',
-        langEnglish: 'English'
+        langEnglish: 'English',
+        officialResult: 'Official Result',
+        points: 'pts',
+        pointsExact: 'Exact score = 3 pts',
+        pointsResult: 'Correct result = 1 pt'
     }
 };
 
