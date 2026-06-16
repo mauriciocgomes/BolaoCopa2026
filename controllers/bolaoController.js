@@ -193,6 +193,16 @@ async function fazerAposta(req, res) {
             return res.redirect(`/?error=${encodeURIComponent(t('errorBetsClosed'))}&lang=${lang}`);
         }
         
+        // Verifica se o participante já apostou neste jogo
+        const apostasExistentes = await lerApostasPorJogo(numJogoId);
+        const jaApostou = apostasExistentes.some(aposta => 
+            aposta.nome.toLowerCase() === nome.trim().toLowerCase()
+        );
+        
+        if (jaApostou) {
+            return res.redirect(`/?error=${encodeURIComponent('Você já fez uma aposta neste jogo!')}&lang=${lang}`);
+        }
+        
         // Salva a aposta
         await adicionarAposta({
             nome: nome.trim(),
@@ -227,6 +237,16 @@ async function adminResultados(req, res) {
             dataHoraFormatada: formatarDataJogo(jogo.dataHora),
             resultado: resultadosMap[jogo.id] || null
         }));
+        
+        // Ordena jogos: sem resultado primeiro (por data), com resultado no final
+        jogosComResultados.sort((a, b) => {
+            // Jogos sem resultado vêm antes dos com resultado
+            if (!a.resultado && b.resultado) return -1;
+            if (a.resultado && !b.resultado) return 1;
+            
+            // Se ambos têm ou não têm resultado, ordena por data
+            return new Date(a.dataHora) - new Date(b.dataHora);
+        });
         
         const lang = req.lang || 'pt';
         const t = (key) => getTranslation(lang, key);
