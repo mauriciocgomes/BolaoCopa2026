@@ -38,7 +38,7 @@
                 <h3>🏆 Ranking de Pontos</h3>
                 <div class="ranking-list">
                     <% ranking.forEach((participante, index) => { %>
-                        <div class="ranking-item <%= index === 0 ? 'primeiro' : index === 1 ? 'segundo' : index === 2 ? 'terceiro' : '' %>">
+                        <div class="ranking-item <%= index === 0 ? 'primeiro' : index === 1 ? 'segundo' : index === 2 ? 'terceiro' : '' %>" onclick="window.location.href='/participante/<%= encodeURIComponent(participante.nome) %>?lang=<%= lang %>'" style="cursor: pointer;">
                             <span class="ranking-posicao"><%= index + 1 %>º</span>
                             <span class="ranking-nome"><%= participante.nome %></span>
                             <span class="ranking-pontos"><%= participante.totalPontos %> pts</span>
@@ -206,7 +206,7 @@
                             </form>
 
                             <div class="apostas-section">
-                                <h4>� <%= t('betsRegistered') %></h4>
+                                <h4>📊 <%= t('betsRegistered') %></h4>
                                 <% if (jogo.resultado) { %>
                                     <div class="pontos-legenda">
                                         <span class="legenda-item legenda-exato">🥇 <%= t('pointsExact') %></span>

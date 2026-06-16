@@ -68,8 +68,19 @@ async function lerApostasPorJogo(jogoId) {
     return todasApostas.filter(aposta => aposta.jogo_id === jogoId);
 }
 
+/**
+ * Lê apostas de um participante específico
+ * @param {string} nome - Nome do participante
+ * @returns {Promise<Array>} - Array de apostas do participante
+ */
+async function lerApostasPorParticipante(nome) {
+    const todasApostas = await lerApostas();
+    return todasApostas.filter(aposta => aposta.nome.toLowerCase() === nome.toLowerCase());
+}
+
 module.exports = {
     adicionarAposta,
     lerApostas,
-    lerApostasPorJogo
+    lerApostasPorJogo,
+    lerApostasPorParticipante
 };

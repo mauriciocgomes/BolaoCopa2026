@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Apostas de <%= nome %> - Bolão Copa 2026</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta name="theme-color" content="#1e3c72">
+    <style>
+        .estatisticas-participante {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        @media (min-width: 768px) {
+            .estatisticas-participante {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+            }
+        }
+        .estatistica-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .estatistica-valor {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 5px;
+        }
+        .estatistica-label {
+            display: block;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .apostas-participante-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .aposta-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .aposta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .aposta-data {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .aposta-jogo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        @media (max-width: 480px) {
+            .aposta-jogo {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        .time-aposta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
+        }
+        .time-aposta .bandeira {
+            font-size: 2.5rem;
+        }
+        .time-aposta .nome {
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .placar-aposta {
+            text-align: center;
+        }
+        .placar-aposta .palpite {
+            background: #2a5298;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: inline-block;
+        }
+        .resultado-oficial-aposta {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .resultado-oficial-aposta .resultado-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-right: 8px;
+        }
+        .resultado-oficial-aposta .resultado-placar {
+            font-size: 1.3rem;
+            color: #000;
+        }
+        .resultado-pendente {
+            background: #f8f9fa;
+            color: #666;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .jogo-desconhecido {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="lang-selector">
+                <a href="/?lang=<%= lang %>" class="lang-btn">← Voltar ao Início</a>
+            </div>
+            <h1>⚽ Apostas de <%= nome %></h1>
+            <p>Bolão Copa 2026</p>
+        </header>
+
+        <div class="estatisticas-participante">
+            <div class="estatistica-card">
+                <span class="estatistica-valor"><%= estatisticas.totalPontos %></span>
+                <span class="estatistica-label">Pontos Totais</span>
+            </div>
+            <div class="estatistica-card">
+                <span class="estatistica-valor"><%= estatisticas.placaresExatos %></span>
+                <span class="estatistica-label">🥇 Placares Exatos</span>
+            </div>
+            <div class="estatistica-card">
+                <span class="estatistica-valor"><%= estatisticas.resultadosCorretos %></span>
+                <span class="estatistica-label">✅ Resultados</span>
+            </div>
+            <div class="estatistica-card">
+                <span class="estatistica-valor"><%= estatisticas.totalApostas %></span>
+                <span class="estatistica-label">Total de Apostas</span>
+            </div>
+        </div>
+
+        <main>
+            <% if (apostas.length === 0) { %>
+                <div class="alert alert-info">
+                    <%= nome %> ainda não fez nenhuma aposta.
+                </div>
+            <% } else { %>
+                <div class="apostas-participante-lista">
+                    <% apostas.forEach(aposta => { %>
+                        <div class="aposta-card">
+                            <div class="aposta-header">
+                                <span class="aposta-data">📅 <%= aposta.jogo ? aposta.jogo.dataHoraFormatada : 'Data desconhecida' %></span>
+                                <% if (aposta.pontos > 0) { %>
+                                    <span class="pontos-badge <%= aposta.pontos === 3 ? 'pontos-exato' : 'pontos-resultado' %>">
+                                        +<%= aposta.pontos %> pts
+                                    </span>
+                                <% } %>
+                            </div>
+
+                            <% if (aposta.jogo) { %>
+                                <div class="aposta-jogo">
+                                    <div class="time-aposta">
+                                        <span class="bandeira"><%= aposta.jogo.bandeira1 %></span>
+                                        <span class="nome"><%= aposta.jogo.time1 %></span>
+                                    </div>
+                                    <div class="placar-aposta">
+                                        <span class="palpite"><%= aposta.palpite_time1 %> x <%= aposta.palpite_time2 %></span>
+                                    </div>
+                                    <div class="time-aposta">
+                                        <span class="bandeira"><%= aposta.jogo.bandeira2 %></span>
+                                        <span class="nome"><%= aposta.jogo.time2 %></span>
+                                    </div>
+                                </div>
+
+                                <% if (aposta.resultado) { %>
+                                    <div class="resultado-oficial-aposta">
+                                        <span class="resultado-label">🏆 Resultado:</span>
+                                        <span class="resultado-placar"><%= aposta.resultado.placar_time1 %> x <%= aposta.resultado.placar_time2 %></span>
+                                    </div>
+                                <% } else { %>
+                                    <div class="resultado-pendente">
+                                        ⏳ Resultado ainda não disponível
+                                    </div>
+                                <% } %>
+                            <% } else { %>
+                                <div class="jogo-desconhecido">
+                                    Jogo não encontrado (ID: <%= aposta.jogo_id %>)
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </main>
+
+        <footer>
+            <p>Bolão Copa 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 const { lerJogos, permiteApostas, formatarDataJogo, getBandeira } = require('../utils/jogosHelper');
-const { lerApostasPorJogo, adicionarAposta } = require('../utils/csvHelper');
+const { lerApostasPorJogo, adicionarAposta, lerApostasPorParticipante } = require('../utils/csvHelper');
 const { getTranslation } = require('../utils/i18n');
 const { lerResultados, salvarResultado } = require('../utils/resultadosHelper');
 
@@ -280,9 +280,81 @@ async function salvarResultadoJogo(req, res) {
     }
 }
 
+/**
+ * Renderiza página com todas as apostas de um participante
+ */
+async function verApostasParticipante(req, res) {
+    try {
+        const nomeParticipante = req.params.nome;
+        const lang = req.lang || 'pt';
+        const t = (key) => getTranslation(lang, key);
+
+        const apostasParticipante = await lerApostasPorParticipante(nomeParticipante);
+        const jogos = await lerJogos();
+        const resultados = await lerResultados();
+
+        const resultadosMap = {};
+        resultados.forEach(r => {
+            resultadosMap[r.jogo_id] = r;
+        });
+
+        const jogosMap = {};
+        jogos.forEach(jogo => {
+            jogosMap[jogo.id] = jogo;
+        });
+
+        const apostasCompletas = apostasParticipante.map(aposta => {
+            const jogo = jogosMap[aposta.jogo_id];
+            const resultado = resultadosMap[aposta.jogo_id] || null;
+            const pontos = calcularPontos(aposta, resultado);
+
+            return {
+                ...aposta,
+                jogo: jogo ? {
+                    time1: jogo.time1,
+                    time2: jogo.time2,
+                    bandeira1: getBandeira(jogo.time1),
+                    bandeira2: getBandeira(jogo.time2),
+                    dataHoraFormatada: formatarDataJogo(jogo.dataHora)
+                } : null,
+                resultado: resultado,
+                pontos: pontos
+            };
+        }).sort((a, b) => {
+            if (!a.jogo || !b.jogo) return 0;
+            return new Date(b.jogo.dataHora) - new Date(a.jogo.dataHora);
+        });
+
+        const estatisticas = {
+            totalApostas: apostasCompletas.length,
+            placaresExatos: apostasCompletas.filter(a => a.pontos === 3).length,
+            resultadosCorretos: apostasCompletas.filter(a => a.pontos === 1).length,
+            totalPontos: apostasCompletas.reduce((sum, a) => sum + a.pontos, 0)
+        };
+
+        res.render('participante', {
+            nome: nomeParticipante,
+            apostas: apostasCompletas,
+            estatisticas: estatisticas,
+            lang: lang,
+            t: t
+        });
+    } catch (error) {
+        console.error('Erro ao carregar apostas do participante:', error);
+        const lang = req.lang || 'pt';
+        const t = (key) => getTranslation(lang, key);
+        res.status(500).render('error', {
+            mensagem: t('errorLoadingGames'),
+            lang: lang,
+            t: t
+        });
+    }
+}
+
 module.exports = {
     index,
     fazerAposta,
     adminResultados,
-    salvarResultadoJogo
+    salvarResultadoJogo,
+    verApostasParticipante
 };
