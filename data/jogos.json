@@ -27,10 +27,12 @@
   { "id": 26, "time1": "Suíça", "time2": "Bósnia e Herzegovina", "dataHora": "2026-06-18T12:00:00Z" },
   { "id": 27, "time1": "Canadá", "time2": "Catar", "dataHora": "2026-06-18T15:00:00Z" },
   { "id": 28, "time1": "México", "time2": "Coreia do Sul", "dataHora": "2026-06-18T19:00:00Z" },
-  { "id": 29, "time1": "Escócia", "time2": "Brasil", "dataHora": "2026-06-19T18:00:00Z" },
-  { "id": 30, "time1": "Marrocos", "time2": "Haiti", "dataHora": "2026-06-19T18:00:00Z" },
-  { "id": 31, "time1": "Estados Unidos", "time2": "Austrália", "dataHora": "2026-06-19T12:00:00Z" },
+
+  { "id": 29, "time1": "Estados Unidos", "time2": "Austrália", "dataHora": "2026-06-19T12:00:00Z" },
+  { "id": 30, "time1": "Escócia", "time2": "Marrocos", "dataHora": "2026-06-19T16:00:00Z" },
+  { "id": 31, "time1": "Brasil", "time2": "Haiti", "dataHora": "2026-06-19T18:00:00Z" },
   { "id": 32, "time1": "Turquia", "time2": "Paraguai", "dataHora": "2026-06-19T20:00:00Z" },
+
   { "id": 33, "time1": "Alemanha", "time2": "Costa do Marfim", "dataHora": "2026-06-20T16:00:00Z" },
   { "id": 34, "time1": "Holanda", "time2": "Suécia", "dataHora": "2026-06-20T12:00:00Z" },
   { "id": 35, "time1": "Equador", "time2": "Curaçao", "dataHora": "2026-06-20T19:00:00Z" },
